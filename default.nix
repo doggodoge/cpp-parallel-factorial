@@ -1,18 +1,20 @@
-with import <nixpkgs> {};
+{ sources ? import ./nix/sources.nix
+, pkgs ? import sources.nixpkgs {}
+}:
 
-stdenv.mkDerivation {
+pkgs.stdenv.mkDerivation {
   name = "factorial";
   version = "0.0.1";
   src = ./.;
 
   nativeBuildInputs = [
-    clang
-    ninja
-    cmake
+    pkgs.llvmPackages_latest.clang
+    pkgs.ninja
+    pkgs.cmake
   ];
 
   buildInputs = [
-    gmp
+    pkgs.gmp
   ];
 
   configurePhase = ''
