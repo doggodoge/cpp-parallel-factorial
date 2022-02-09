@@ -3,7 +3,7 @@
 }:
 
 pkgs.stdenv.mkDerivation {
-  name = "factorial";
+  name = "cpp-threading-test";
   version = "0.0.1";
   src = ./.;
 
@@ -29,7 +29,7 @@ pkgs.stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp factorial $out/bin
+    cp cpp-threading-test $out/bin
   '';
 }
 
