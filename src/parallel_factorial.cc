@@ -1,6 +1,6 @@
+#include <vector>
 #include <future>
 #include <gmp.h>
-#include <vector>
 
 auto const processor_count = std::thread::hardware_concurrency();
 
@@ -19,13 +19,7 @@ arbitrary_precision_product(std::vector<std::string> const &str_numbers);
 std::vector<std::future<std::string>>
 init_futures(std::vector<FactorialRange> const &ranges);
 
-int main(int argc, char *argv[]) {
-  if (argc == 1) {
-    std::fprintf(stderr, "Please enter a valid number.\n");
-    return EXIT_FAILURE;
-  }
-
-  auto limit = std::strtol(argv[1], nullptr, 10);
+std::string parallel_factorial(long limit) {
   std::vector<FactorialRange> ranges = get_ranges(limit);
 
   auto futures = init_futures(ranges);
@@ -34,14 +28,13 @@ int main(int argc, char *argv[]) {
   for (auto &future : futures) {
     results.emplace_back(future.get());
   }
-  std::string const result = arbitrary_precision_product(results);
-  std::printf("%s\n", result.c_str());
-  return EXIT_SUCCESS;
+  std::string result = arbitrary_precision_product(results);
+  return result;
 }
 
 std::vector<FactorialRange> get_ranges(long limit) {
   if (limit < processor_count) {
-    return std::vector{FactorialRange(1, limit)};
+    return std::vector<FactorialRange>{FactorialRange(1, limit)};
   }
   std::vector<FactorialRange> ranges;
   ranges.reserve(processor_count);
