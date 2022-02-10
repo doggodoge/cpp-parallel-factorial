@@ -18,7 +18,7 @@ jobs:
           command: "mkdir release && cd release && cmake .. -G Ninja && ninja"
       - run:
           name: "Test"
-          command: "cd tests && ./parallel-factorial-test"
+          command: "cd release/tests && ./parallel-factorial-test"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
