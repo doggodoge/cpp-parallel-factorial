@@ -11,10 +11,13 @@ pkgs.stdenv.mkDerivation {
     pkgs.llvmPackages_latest.clang
     pkgs.ninja
     pkgs.cmake
+    pkgs.python3
+    pkgs.niv
   ];
 
   buildInputs = [
     pkgs.gmp
+    pkgs.googletest
   ];
 
   configurePhase = ''
@@ -29,7 +32,7 @@ pkgs.stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp parallel-factorial $out/bin
+    cp src/parallel-factorial $out/bin
   '';
 }
 
