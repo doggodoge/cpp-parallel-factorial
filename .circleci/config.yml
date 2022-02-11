@@ -15,10 +15,12 @@ jobs:
           command: "sudo apt update && sudo apt install -y clang cmake ninja-build"
       - run:
           name: "Build"
-          command: "mkdir release && cd release && cmake .. -G Ninja && ninja"
+          command: "mkdir debug && cd debug && cmake .. -G Ninja && ninja"
       - run:
           name: "Test"
-          command: "cd release/tests && ./parallel-factorial-test"
+          command: "cd debug/tests && ./parallel-factorial-test --gtest_output=xml"
+      - store_test_results:
+          path: "debug/tests/test_detail.xml"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
