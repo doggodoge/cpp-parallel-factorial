@@ -2,6 +2,8 @@
 
 Fast ⚡ implementation of factorial written in C++.
 
+[![CircleCI](https://circleci.com/gh/doggodoge/cpp-parallel-factorial/tree/main.svg?style=svg)](https://circleci.com/gh/doggodoge/cpp-parallel-factorial/tree/main)
+
 I wrote this just to see what writing concurrent/parallel code is like in C++
 and was pleasantly surprised compared to how awkward pthreads are in C. My
 experience with Rust and Rayon has still been significantly better.
