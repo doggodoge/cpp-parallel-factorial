@@ -15,31 +15,12 @@ being one of the first things I've ever written in C++ that kind of works.
 
 ## Build
 
-### Nix
-
-If you have the nix package manager installed or are using NixOS, just run:
-
-```shell
-$ nix-build
-```
-
-For a development environment, run:
-
-```shell
-$ nix-shell
-```
-
-### Other Unix
-
 Required libraries and tools:
 
 - clang
 - cmake
 - ninja
 - gmp
-
-This list may be out of date. If it is, check default.nix for an up to date
-list of build and runtime dependencies.
 
 Once these dependencies are satisfied, you can build by running:
 
@@ -50,6 +31,11 @@ $ ninja
 ```
 
 and you can then run the resulting executable.
+
+## Test
+
+To run the unit tests, build with the instructions above, then run the
+`cpp-parallel-factorial` binary in the `tests` folder.
 
 ## How to Use
 
