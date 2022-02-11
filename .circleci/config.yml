@@ -5,22 +5,26 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  build-and-test:
     docker:
       - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: "Setup"
+          command: "sudo apt update && sudo apt install -y clang cmake ninja-build"
+      - run:
+          name: "Build"
+          command: "mkdir debug && cd debug && cmake .. -G Ninja && ninja"
+      - run:
+          name: "Test"
+          command: "cd debug/tests && ./parallel-factorial-test --gtest_output=xml"
+      - store_test_results:
+          path: "debug/tests/test_detail.xml"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  build-and-test-workflow:
     jobs:
-      - say-hello
+      - build-and-test
