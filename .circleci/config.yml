@@ -4,7 +4,6 @@ jobs:
   build-and-test:
     docker:
       - image: cimg/base:stable
-    parallelism: 1
     resource_class: small
     steps:
       - checkout
@@ -56,3 +55,4 @@ workflows:
   build-and-test-workflow:
     jobs:
       - build-and-test
+      - infer
