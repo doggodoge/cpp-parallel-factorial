@@ -12,7 +12,7 @@ jobs:
           name: "Setup"
           command: |
             sudo apt update && \
-            sudo apt install -y clang cmake ninja-build
+            sudo apt install -y cmake ninja-build
       - run:
           name: "Build"
           command: "mkdir debug && cd debug && cmake .. -G Ninja && ninja"
@@ -32,7 +32,7 @@ jobs:
           name: "Setup"
           command: |
             sudo apt update && \
-            sudo apt install -y clang cmake ninja-build && \
+            sudo apt install -y cmake && \
             VERSION=1.1.0; \
             curl -sSL "https://github.com/facebook/infer/releases/download/v$VERSION/infer-linux64-v$VERSION.tar.xz" \
             | sudo tar -C /opt -xJ && \
@@ -44,7 +44,7 @@ jobs:
             git diff --name-only origin/"${CIRCLE_BRANCH}"..origin/main > index.txt
             mkdir debug && cd debug && cmake .. -G "Unix Makefiles"
             infer capture -- make -j "$(nproc)"
-            infer analyse --changed-files-index index.txt
+            infer analyze --changed-files-index index.txt
             cp infer-out/report.json report-feature.json
             git checkout main
             infer capture --reactive -- make -j "$(nproc)"
