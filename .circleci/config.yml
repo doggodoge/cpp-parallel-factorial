@@ -10,7 +10,9 @@ jobs:
       - checkout
       - run:
           name: "Setup"
-          command: "sudo apt update && sudo apt install -y clang cmake ninja-build"
+          command: |
+            sudo apt update && \
+            sudo apt install -y clang cmake ninja-build
       - run:
           name: "Build"
           command: "mkdir debug && cd debug && cmake .. -G Ninja && ninja"
@@ -19,6 +21,36 @@ jobs:
           command: "cd debug/tests && ./parallel-factorial-test --gtest_output=xml"
       - store_test_results:
           path: "debug/tests/test_detail.xml"
+
+  infer:
+    docker:
+      - image: cimg/base:stable
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: "Setup"
+          command: |
+            sudo apt update && \
+            sudo apt install -y clang cmake ninja-build && \
+            VERSION=1.1.0; \
+            curl -sSL "https://github.com/facebook/infer/releases/download/v$VERSION/infer-linux64-v$VERSION.tar.xz" \
+            | sudo tar -C /opt -xJ && \
+            sudo ln -s "/opt/infer-linux64-v$VERSION/bin/infer" /usr/local/bin/infer
+      - run:
+          name: "Run Infer"
+          command: |
+            git checkout "${CIRCLE_BRANCH}"
+            git diff --name-only origin/"${CIRCLE_BRANCH}"..origin/main > index.txt
+            mkdir debug && cd debug && cmake .. -G Ninja
+            infer capture -- ninja
+            infer analyse --changed-files-index index.txt
+            cp infer-out/report.json report-feature.json
+            git checkout main
+            infer capture --reactive -- ninja
+            infer analyze --reactive --changed-files-index index.txt
+            infer reportdiff --report-current report-feature.json --report-previous infer-out/report.json
+
 
 workflows:
   build-and-test-workflow:
