@@ -31,8 +31,7 @@ jobs:
       - run:
           name: "Setup"
           command: |
-            sudo apt update && \
-            sudo apt install -y cmake && \
+            echo "Installing Infer"
             VERSION=1.1.0; \
             curl -sSL "https://github.com/facebook/infer/releases/download/v$VERSION/infer-linux64-v$VERSION.tar.xz" \
             | sudo tar -C /opt -xJ && \
@@ -41,15 +40,13 @@ jobs:
           name: "Run Infer"
           command: |
             git checkout "${CIRCLE_BRANCH}"
-            mkdir debug
-            git diff --name-only "origin/${CIRCLE_BRANCH}..origin/main" > ./debug/index.txt
-            cd debug
-            infer compile -- cmake ..
+            git diff --name-only "origin/${CIRCLE_BRANCH}..origin/main" > index.txt
+            infer compile -- cmake .
             infer capture -- make -j "$(nproc)"
             infer analyze --changed-files-index index.txt
             cp infer-out/report.json report-feature.json
             git checkout main
-            infer compile -- cmake ..
+            infer compile -- cmake .
             infer capture --reactive -- make -j "$(nproc)"
             infer analyze --reactive --changed-files-index index.txt
             infer reportdiff --report-current report-feature.json --report-previous infer-out/report.json
