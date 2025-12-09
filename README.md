@@ -1,4 +1,6 @@
-# C++ Parallel Factorial
+Archived on GitHub and moved to https://git.sr.ht/~gary_moore/cpp-parallel-factorial
+
+    # C++ Parallel Factorial
 
 Fast ⚡ implementation of factorial written in C++.
 
